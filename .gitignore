@@ -1,2 +1,6 @@
-**/__pycache__/
 .venv/
+**/__pycache__/
+**/*egg-info/
+build/
+.pytest_cache/
+.vscode/
