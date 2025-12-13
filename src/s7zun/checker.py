@@ -2,9 +2,9 @@ import sys
 import json
 import re
 import webbrowser
+import asyncio
 from urllib import request
-from winsdk_toast import Notifier, Toast
-from winsdk_toast.event import EventArgsActivated
+from desktop_notifier import DesktopNotifier
 
 
 def get_current_version(path: str) -> str:
@@ -26,19 +26,29 @@ def get_latest_version() -> str:
         return j["name"]
 
 
-def on_click(args: EventArgsActivated) -> None:
-    if not webbrowser.open("https://github.com/ip7z/7zip/releases/latest"):
-        print("there was a problem opening the url 'https://github.com/ip7z/7zip/releases/latest'")
-        sys.exit(1)
-    sys.exit(0)
+async def send_toast(latest_version: str) -> None:
+    clicked = asyncio.Event()
 
+    def on_click() -> None:
+        clicked.set()
 
-def send_toast(latest_version: str) -> None:
-    notifier = Notifier("7-Zip Update Checker")
-    toast = Toast()
-    toast.add_text(f"A new version found for 7-Zip: {latest_version}")
-    toast.add_action("Open URL")
-    notifier.show(toast, handle_activated=on_click)
+        if not webbrowser.open("https://github.com/ip7z/7zip/releases/latest"):
+            print("there was a problem opening the url 'https://github.com/ip7z/7zip/releases/latest'")
+            sys.exit(1)
+
+    notifier = DesktopNotifier("7-Zip Update Notifier")
+
+    await notifier.send(
+        title="New Version",
+        message=f"A new version was found for 7-Zip: {latest_version}",
+        timeout=5,
+        on_clicked=on_click
+    )
+
+    try:
+        await asyncio.wait_for(clicked.wait(), timeout=25)
+    except asyncio.TimeoutError:
+        pass
 
 
 def check(path: str) -> bool:
@@ -46,7 +56,7 @@ def check(path: str) -> bool:
     lv = get_latest_version()
 
     if cv != lv:
-        send_toast(lv)
+        asyncio.run(send_toast(lv))
         return True
     
     return False

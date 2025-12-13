@@ -16,7 +16,7 @@ classifiers = [
 license = "GPL-3.0"
 license-files = ["LICEN[CS]E*"]
 dependencies = [
-    "winsdk-toast"
+    "desktop-notifier"
 ]
 
 [project.optional-dependencies]
@@ -36,5 +36,5 @@ build-backend = "setuptools.build_meta"
 testpaths = ["tests"]
 pythonpath = [
     ".",
-    "src"
+    "./src/"
 ]
