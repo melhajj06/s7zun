@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
     "Natural Language :: English",
     "Topic :: Software Development :: Version Control"
 ]
