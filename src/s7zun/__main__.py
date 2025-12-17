@@ -1,6 +1,6 @@
 import os
 import sys
-from checker import check
+from .checker import check
 
 
 if __name__ == "__main__":

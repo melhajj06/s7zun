@@ -8,6 +8,17 @@ from desktop_notifier import DesktopNotifier
 
 
 def get_current_version(path: str) -> str:
+    """Gets the current version of 7-Zip from the installation's ``readme.txt``
+
+    This function assumes that ``path`` points to a valid 7-Zip ``readme.txt``
+    which *should* contain, on the very first line:
+
+    "7-Zip xx.xx"
+    where "xx.xx" is the version
+
+    :param str path: path to 7-Zip installation
+    :return str: the current version of 7-Zip installed
+    """
     with open(path, 'r') as v:
         pattern = re.compile(r"(?<![\w\-\.])\d+(?:\.?\d+)*(?![\w\-\.])")
         line = v.readline()
@@ -21,14 +32,25 @@ def get_current_version(path: str) -> str:
 
 
 def get_latest_version() -> str:
+    """Gets the latest version of 7-Zip posted on the `7-Zip GitHub <https://github.com/ip7z/7zip/>`_
+
+    :return str: the latest version of 7-Zip
+    """
     with request.urlopen("https://api.github.com/repos/ip7z/7zip/releases/latest") as res:
         j = json.loads(res.read().decode("utf-8"))
         return j["name"]
 
 
 async def send_toast(latest_version: str) -> None:
+    """Sends a desktop notification (toast) notifying the user of a new 7-Zip version
+
+    The notification is clickable and will open the `latest release <github.com/ip7z/7zip/releases/latest>`_ page on GitHub for 7-Zip
+
+    :param str latest_version: the latest version of 7-Zip
+    """
     clicked = asyncio.Event()
 
+    # click callback that opens the latest 7-Zip version in GitHub
     def on_click() -> None:
         clicked.set()
 
@@ -52,11 +74,16 @@ async def send_toast(latest_version: str) -> None:
 
 
 def check(path: str) -> bool:
+    """Checks if the currently installed 7-Zip is up-to-date
+
+    :param str path: path to 7-Zip installation
+    :return bool: ``True`` if the currently installed 7-Zip is up-to-date
+    """
     cv = get_current_version(path)
     lv = get_latest_version()
 
     if cv != lv:
         asyncio.run(send_toast(lv))
-        return True
+        return False
     
-    return False
+    return True
