@@ -4,7 +4,7 @@ version = "2025.1"
 authors = [
   { name = "melhajj06" },
 ]
-description = "A small package to check for 7zip version updates"
+description = "A small package to check for 7-Zip version updates"
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
@@ -25,8 +25,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/melhajj06/7zun"
-Issues = "https://github.com/melhajj06/7zun/issues"
+Homepage = "https://github.com/melhajj06/s7zun"
+Issues = "https://github.com/melhajj06/s7zun/issues"
 
 [build-system]
 requires = ["setuptools"]
