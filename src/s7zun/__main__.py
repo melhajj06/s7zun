@@ -12,17 +12,21 @@ class ExitCodes(Enum):
     """
     SUCCESS = 0
     INVALID_USAGE = 1
-    INVALID_DIRECTORY = 2
-    EXECUTION_FAILURE = 3
+    INVALID_7Z_DIRECTORY = 2
+    INVALID_LOG_DIRECTORY = 3
+    EXECUTION_FAILURE = 4
 
 
-def setup_logger(logs_dir: str):
+def setup_logger(logs_dir: str) -> bool:
     """Sets up the logging path and config
 
     :param str logs_dir: the directory in which to create log files
     """
     if not os.path.exists(logs_dir):
         os.makedirs(logs_dir)
+
+    if not os.path.isdir(logs_dir):
+        return False
 
     date = datetime.datetime.now().date().strftime(r"%Y-%m-%d")
     time = datetime.datetime.now().time().strftime(r"%H-%M-%S")
@@ -35,6 +39,8 @@ def setup_logger(logs_dir: str):
         level=logging.INFO,
         encoding="utf-8"
     )
+
+    return True
 
 
 def main(argv: list[str]) -> ExitCodes:
@@ -52,11 +58,12 @@ def main(argv: list[str]) -> ExitCodes:
 
     sz_dir = os.path.abspath(argv[1])
 
-    setup_logger(logs_dir)
+    if not setup_logger(logs_dir):
+        return ExitCodes.INVALID_LOG_DIRECTORY
 
     if not os.path.isdir(sz_dir):
         logging.getLogger(__name__).error(f"'{sz_dir}' is not a valid directory")
-        return ExitCodes.INVALID_DIRECTORY
+        return ExitCodes.INVALID_7Z_DIRECTORY
     
     exit_code = check(sz_dir)
 
