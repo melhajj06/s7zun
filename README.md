@@ -5,7 +5,7 @@ This is a simple [Python](https://www.python.org/) package that checks for [7-Zi
 
 ## Usage
 
-Install via [pip](https://pypi.org/project/pip/) using: `pip install git+https://github.com/melhajj06/s7zun@2025.1` (see [this](https://stackoverflow.com/questions/20101834/pip-install-from-git-repo-branch) for more details)\
+Install via [pip](https://pypi.org/project/pip/) using: `pip install git+https://github.com/melhajj06/s7zun@2026.1` (see [this](https://stackoverflow.com/questions/20101834/pip-install-from-git-repo-branch) for more details)\
 The main script takes a single command line argument: the path to the 7-Zip installation\
 **Example:** `s7zun "path/to/7-Zip" ["path/to/log/directory"]`
 
