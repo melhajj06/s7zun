@@ -49,6 +49,8 @@ def get_current_version(path: str) -> str:
             return ""
     except subprocess.CalledProcessError:
         logger.error("7-Zip exited with non-zero exit status", exc_info=True)
+    except FileNotFoundError:
+        logger.error(f"'{path}' does not exist", exc_info=True)
     
     return ""
 
