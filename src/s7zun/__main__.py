@@ -61,8 +61,8 @@ def main(argv: list[str]) -> ExitCodes:
     if not setup_logger(logs_dir):
         return ExitCodes.INVALID_LOG_DIRECTORY
 
-    if not os.path.exists(path_to_7z):
-        logging.getLogger(__name__).error(f"'{path_to_7z}' does not exist")
+    if not os.path.exists(path_to_7z) or os.path.isdir(path_to_7z):
+        logging.getLogger(__name__).error(f"'{path_to_7z}' does not exist or is not a path to an executable")
         return ExitCodes.INVALID_7Z_PATH
     
     exit_code = check(path_to_7z)
