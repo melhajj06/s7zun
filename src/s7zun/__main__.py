@@ -12,7 +12,7 @@ class ExitCodes(Enum):
     """
     SUCCESS = 0
     INVALID_USAGE = 1
-    INVALID_7Z_DIRECTORY = 2
+    INVALID_7Z_PATH = 2
     INVALID_LOG_DIRECTORY = 3
     EXECUTION_FAILURE = 4
 
@@ -56,16 +56,16 @@ def main(argv: list[str]) -> ExitCodes:
         print("usage: python -m s7zun 'path/to/7-Zip/installation' ['path/to/logs/directory']")
         return ExitCodes.INVALID_USAGE
 
-    sz_dir = os.path.abspath(argv[1])
+    path_to_7z = os.path.abspath(argv[1])
 
     if not setup_logger(logs_dir):
         return ExitCodes.INVALID_LOG_DIRECTORY
 
-    if not os.path.isdir(sz_dir):
-        logging.getLogger(__name__).error(f"'{sz_dir}' is not a valid directory")
-        return ExitCodes.INVALID_7Z_DIRECTORY
+    if not os.path.exists(path_to_7z):
+        logging.getLogger(__name__).error(f"'{path_to_7z}' does not exist")
+        return ExitCodes.INVALID_7Z_PATH
     
-    exit_code = check(sz_dir)
+    exit_code = check(path_to_7z)
 
     if exit_code == ExecutionCodes.VERSION_NOT_FOUND:
         return ExitCodes.EXECUTION_FAILURE

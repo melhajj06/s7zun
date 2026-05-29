@@ -25,18 +25,18 @@ class ExecutionCodes(Enum):
 def get_current_version(path: str) -> str:
     """Gets the current version of 7-Zip from the installation's binary
 
-    ``path`` must be a valid 7-Zip installation folder where the binary ``7z.exe`` exists.
+    ``path`` must point to the 7-Zip executable.
     When running ``7z.exe``, the expected output is a help menu that contains the installed 7-Zip version at the top.
 
     "7-Zip xx.xx ..." where "xx.xx" is the version
 
-    :param str path: path to 7-Zip installation
+    :param str path: path to 7-Zip executable
     :return str: the current version of 7-Zip installed
     """
     pattern = re.compile(r"7-Zip (\b\d+(?:(?:\.\d+)?)*\b)")
 
     try:
-        result = subprocess.run(path + r"/7z.exe", capture_output=True, text=True, check=True)
+        result = subprocess.run(path, capture_output=True, text=True, check=True)
 
         m = re.search(pattern, result.stdout)
 
@@ -62,8 +62,8 @@ def get_latest_version() -> str:
     """
     with request.urlopen("https://api.github.com/repos/ip7z/7zip/releases/latest") as res:
         j = json.loads(res.read().decode("utf-8"))
-        logger.info(f"Latest 7-Zip version found: '{j["name"]}'")
-        return j["name"]
+        logger.info(f"Latest 7-Zip version found: '{j["tag_name"]}'")
+        return j["tag_name"]
 
 
 async def send_toast(latest_version: str) -> None:
