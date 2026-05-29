@@ -53,7 +53,7 @@ def main(argv: list[str]) -> ExitCodes:
     if len(argv) == 3:
         logs_dir = os.path.abspath(argv[2])
     elif len(argv) != 2:
-        print("usage: python -m s7zun 'path/to/7-Zip/installation' ['path/to/logs/directory']")
+        print("usage: python -m s7zun 'path/to/7-Zip/executable' ['path/to/logs/directory']")
         return ExitCodes.INVALID_USAGE
 
     path_to_7z = os.path.abspath(argv[1])
