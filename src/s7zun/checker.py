@@ -48,9 +48,7 @@ def get_current_version(path: str) -> str:
             logger.error("7-Zip version could not be found from command output")
             return ""
     except subprocess.CalledProcessError:
-        logger.error("7-Zip command '7z.exe' exited with non-zero exit status", exc_info=True)
-    except FileNotFoundError:
-        logger.error(f"7-Zip command '7z.exe' was not found in '{path}'", exc_info=True)
+        logger.error("7-Zip exited with non-zero exit status", exc_info=True)
     
     return ""
 
